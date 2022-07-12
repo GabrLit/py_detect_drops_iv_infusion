@@ -50,7 +50,7 @@ while cap.isOpened():
     # Resize frame and convert to grayscale
     frame = imutils.resize(frame, width=700)
     frameGray = cv.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    frameGray = cv.GaussianBlur(frameGray, (25, 25), 0)
+    frameGray = cv.GaussianBlur(frameGray, (15, 15), 0)
 
     # MOG Gaussian
     fgmask = fgbg.apply(frameGray)
@@ -100,16 +100,16 @@ while cap.isOpened():
     # cv2.imshow("boundingBoxes", dilation)
     # if args["orig"]:
     #     cv.imshow("original", frame)
-    # if args["gray"]:
-    #     cv.imshow("gray", frameGray)
-    #
-    # os.system('clear')
-    # for boxGroup in boxGroups:
-    #     print(vars(boxGroup))
-    #
-    # cv2.waitKey()
-    # if cv.waitKey(1) == ord('q'):
-    #     break
+    # # if args["gray"]:
+    # #     cv.imshow("gray", frameGray)
+    # #
+    # # os.system('clear')
+    # # for boxGroup in boxGroups:
+    # #     print(vars(boxGroup))
+    # #
+    # # cv.waitKey()
+    # if cv.waitKey(int(args["wait"])) == ord('q'):
+    #      break
 
 
 # Filter out box groups that have only one record of posAndFrames
@@ -120,12 +120,13 @@ def filterOutSingleRecord(bGroup):
 
 
 def filterOutSmallYDiff(bGroup):
-    MIN = MAX = bGroup.posAndFrames[0][0][1]
+    boxCenter = bGroup.posAndFrames[0][0][1] + int(bGroup.posAndFrames[0][0][3])
+    MIN = MAX = boxCenter
     for recrd in bGroup.posAndFrames:
-        if recrd[0][1] < MIN:
-            MIN = recrd[0][1]
-        if recrd[0][1] > MAX:
-            MAX = recrd[0][1]
+        if recrd[0][1] + int(recrd[0][3]) < MIN:
+            MIN = recrd[0][1] + int(recrd[0][3])
+        if recrd[0][1] + int(recrd[0][3] / 2) > MAX:
+            MAX = recrd[0][1] + int(recrd[0][3])
 
     return MAX - MIN > MINIMAL_Y_POS_DIFF
 
@@ -155,18 +156,19 @@ while cap.isOpened():
         for posAndFrame in boxGroup['posAndFrames']:
             if posAndFrame[-1] == frameId:
                 [x, y, w, h] = posAndFrame[0]
-                frame = cv2.putText(frame, str(boxGroup['id']), (x + int(w / 2), y), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                                    (0, 255, 0), 2, cv2.LINE_AA)
                 frame = cv2.circle(frame, (x + int(w / 2), y + int(h / 2)), radius=6, color=(0, 255, 0), thickness=-1)
                 totalCounter = boxGroup['id']
                 break
 
     frame = cv2.putText(frame, "Total drop count: " + str(totalCounter), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1,
                         (0, 255, 0), 2, cv2.LINE_AA)
-    writer.write(frame)
+
     # cv2.imshow("result", frame)
+    # cv.waitKey()
     # if cv.waitKey(1) == ord('q'):
     #     break
+
+    writer.write(frame)
 
 cap.release()
 writer.release()

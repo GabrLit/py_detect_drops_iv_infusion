@@ -1,0 +1,52 @@
+częstość spadania kropel- 44 do 53 w ciągu 15 sekund (2,93 - 3,50) kropel na sekundę.
+
+odległość 15 cm:
+full vid01 - 53 of 53 drops
+full vid02 - 44 of 44 drops
+
+odległość 20cm
+full vid01 - 53 of 53 drops
+full vid02 - 55 of 55 drops
+
+algorytm w dobrym oświetleniu z odległości 15 - 20 cm wykrywa krople bezbłędnie.
+
+W gorszym oświetleniu:
+dim vid01 - 46 of 53 drops
+dim vid02 - 41 of 53 drops
+
+expl01.png - brak wykrycia kropli, prawdopodobnie zbyt duże rozmycie obrazu w skali szarości.
+- zmniejszono maskę rozmycia obrazu z 25x25 na 9x9. Zwiększa się ryzyko fałszywego wykrycia. Z maską 9x9 rezultat
+jest najlepszy - wykryto 51 z 53 kropel. expl02.png - obraz w skali szarości po zmniejszeniu maski rozmycia na 9x9.
+
+Zmniejszenie maski rozmycia niesie ze sobą konsekwencje w postaci wykrywania bąbelków powietrza w przewodzie wychodzącym
+z dolnej części komory. Ze względu na to, w jaki sposób skonstruowany jest algorytm, ta fałszywa pozycja jest rejestrowana
+jako kolejne położenie tej samej kropli, więc nie wpływa to w żaden sposób na skuteczność wykrywania.
+expl03.png - można zobaczyć, że położenie zostało dołączone do id:4.
+
+W przypadku vid02, zmniejszenie maski rozmycia daje błędne wykrycia spowodowane szumem - prawdopodobna przyczyna to odbicie
+światła od spadającej kropli. widoczne na obrazie expl04. Najlepszy rezultat jest osiągany przy rozmyciu 15x15, ale i ono
+daje momentami nieprawidłowe rezultaty.
+
+30 cm:
+expl05 - brak wykrycia kropli, zbyt duże rozmycie obrazu w skali szarości. Zastosowanie maski 9x9
+expl06 - zbyt małe detale, 30cm to zbyt duża odległość, żeby poprawnie wykrywać i śledzić spadające krople.
+30 cm to zbyt duża odległość od aparatu dla przedstawionego rozwiązania.
+expl08 - zastosowanie mniejszego rozmycia ma fatalne skutki- wykrywane są bąbelki powietrza w pojemniku z roztworem.
+
+częstość spadania:
+
+algorytm napotyka problemy kiedy kolejna kropla formuje się zanim zostanie wykryta kolejna, wykrywania są bardzo nieskuteczne.
+expl09 - kropla jest w trakcie śledzenia, podczas kiedy uformowała się już kolejna. Algorytm może wykrywać przy 30 klatkach na sekundę,
+aż do 4 kropel w ciągu sekundy.
+
+Para wodna na ściance znacznie utrudnia wykrywanie, potrzebne jest wtedy dobre źródło światła. Zobacz nomist01, a mist01
+
+Obliczanie bpm również wychodzi lepiej, kiedy jest oświetlenie z tyłu i bez pary wodnej na komorze. Zobacz 250.mp4 a 200Nomist
+
+Zobacz tez babelki. Jak są bąbelki i się odbijają na tle to jest gorsze wykrywanie. Jednak bąbelki w normalnym użytkowaniu nie występują.
+
+
+
+
+
+
